@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Rise of Personal Finance Dashboards — Taking Control of Your Money With Data | Ogunleye Rapheal A. Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0B1120; --blue: #534ab7; --blue-light: #a9a4e8;
+  --white: #FFFFFF; --surface: #F8FAFC;
+}
+body { font-family: 'Manrope', sans-serif; background: var(--surface); color: var(--navy); line-height: 1.6; }
+
+.back-link:hover { color: var(--blue); }
+.back-link svg { width: 16px; height: 16px; }
+
+.hero {
+  background: linear-gradient(135deg, var(--navy), #131c2e);
+  padding: 64px 4% 56px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -120px; right: -120px;
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, #534ab733 0%, transparent 70%);
+}
+.hero-inner { max-width: 720px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.hero-tag {
+  display: inline-block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em;
+  color: #fff; text-transform: uppercase; margin-bottom: 1rem;
+  background: rgba(255,255,255,0.12); padding: 5px 14px; border-radius: 20px;
+}
+.hero-title { font-size: clamp(1.6rem, 3.2vw, 2.3rem); font-weight: 800; color: #fff; letter-spacing: -0.03em; margin-bottom: 1.2rem; line-height: 1.3; }
+.hero-meta { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.hero-meta-item { font-size: 0.82rem; font-weight: 600; color: #a9a4e8; display: flex; align-items: center; gap: 6px; }
+.hero-meta-item svg { width: 14px; height: 14px; }
+
+.article { max-width: 700px; margin: 0 auto; padding: 44px 4% 0; }
+
+.author-row {
+  display: flex; align-items: center; gap: 12px; padding: 16px;
+  background: var(--white); border: 1px solid #E2E8F0; border-radius: 14px; margin-bottom: 36px;
+}
+.author-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: #534ab71a; color: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 800; flex-shrink: 0;
+}
+.author-name { font-size: 0.88rem; font-weight: 700; color: var(--navy); }
+.author-role { font-size: 0.78rem; font-weight: 500; color: #64748B; }
+
+.body-content { font-size: 0.97rem; font-weight: 500; color: #475569; line-height: 1.85; }
+.body-content p { margin-bottom: 18px; }
+.body-content h3 { font-size: 1.15rem; font-weight: 800; color: var(--navy); margin: 36px 0 14px; letter-spacing: -0.02em; }
+
+.stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 24px 0; }
+.stat-box { background: var(--white); border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; text-align: center; }
+.stat-val { font-size: 1.3rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+.stat-lbl { font-size: 0.74rem; font-weight: 600; color: #64748B; margin-top: 4px; line-height: 1.4; }
+
+.highlight-box {
+  background: #534ab710; border-left: 3px solid var(--blue);
+  border-radius: 0 12px 12px 0; padding: 18px 22px; margin: 22px 0;
+}
+.highlight-box p { font-size: 0.9rem; font-weight: 600; color: var(--navy); line-height: 1.7; margin: 0; }
+
+.pull-quote { border-left: 3px solid var(--blue); padding: 12px 22px; margin: 28px 0; }
+.pull-quote p { font-size: 1.08rem; font-weight: 600; color: var(--navy); line-height: 1.6; font-style: italic; }
+
+.list-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.list-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 7px; }
+.list-text { font-size: 0.92rem; font-weight: 500; color: #475569; line-height: 1.75; }
+
+.insight-block { border: 1px solid #E2E8F0; border-radius: 14px; overflow: hidden; margin: 22px 0; background: var(--white); }
+.insight-header { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+.insight-num { width: 32px; height: 32px; border-radius: 50%; background: #534ab715; color: var(--blue); font-size: 0.85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.insight-title { font-size: 0.92rem; font-weight: 700; color: var(--navy); }
+.insight-body { padding: 18px; }
+.insight-body p { font-size: 0.87rem; font-weight: 500; color: #64748B; line-height: 1.75; margin-bottom: 12px; }
+.insight-body p:last-child { margin-bottom: 0; }
+.insight-tip { background: #534ab70d; border-radius: 10px; padding: 13px 16px; margin-top: 12px; }
+.insight-tip p { font-size: 0.82rem; font-weight: 500; color: var(--navy); line-height: 1.6; margin: 0; }
+.insight-tip strong { font-weight: 800; color: var(--blue); }
+
+.weekday-chart, .weekly-chart-box { padding: 18px; background: #F8FAFC; border-radius: 12px; margin: 14px 0; }
+.weekday-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.weekday-row:last-child { margin-bottom: 0; }
+.wd-label { font-size: 0.78rem; font-weight: 600; color: #64748B; width: 38px; flex-shrink: 0; }
+.wd-track { flex: 1; background: #fff; border: 1px solid #E2E8F0; border-radius: 4px; height: 10px; overflow: hidden; }
+.wd-fill { height: 100%; border-radius: 4px; background: #534ab755; }
+.wd-fill.hi { background: var(--blue); }
+.wd-val { font-size: 0.74rem; font-weight: 600; color: #94A3B8; width: 40px; text-align: right; flex-shrink: 0; }
+
+.principle-card { border: 1px solid #E2E8F0; border-radius: 14px; overflow: hidden; margin-bottom: 16px; background: var(--white); }
+.principle-header { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+.principle-icon { width: 36px; height: 36px; border-radius: 10px; background: #534ab715; color: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; font-weight: 800; }
+.principle-label { font-size: 0.68rem; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.05em; }
+.principle-title { font-size: 0.92rem; font-weight: 700; color: var(--navy); }
+.principle-body { padding: 18px; }
+.principle-body p { font-size: 0.87rem; font-weight: 500; color: #64748B; line-height: 1.75; margin-bottom: 10px; }
+.principle-body p:last-child { margin-bottom: 0; }
+
+.dashboard-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 22px 0; }
+.dash-card { border-radius: 12px; overflow: hidden; border: 1px solid #E2E8F0; }
+.dash-label { font-size: 0.7rem; font-weight: 700; padding: 9px 12px; text-align: center; text-transform: uppercase; letter-spacing: 0.05em; }
+.dash-bad .dash-label { background: #FEF2F2; color: #B91C1C; border-bottom: 1px solid #FCA5A5; }
+.dash-good .dash-label { background: #F0FDF4; color: #166534; border-bottom: 1px solid #86EFAC; }
+.dash-content { padding: 13px; background: #F8FAFC; }
+.dash-row { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; font-size: 0.78rem; font-weight: 500; color: #64748B; }
+.dash-row .x { color: #EF4444; font-weight: 800; }
+.dash-row .ck { color: #22C55E; font-weight: 800; }
+
+.hierarchy-demo { background: #F8FAFC; border-radius: 12px; padding: 18px; margin: 16px 0; border: 1px solid #E2E8F0; }
+.hier-title { font-size: 0.7rem; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px; }
+.kpi-strip-mini { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
+.kpi-box-mini { background: #fff; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; text-align: center; }
+.kpi-val-mini { font-size: 0.92rem; font-weight: 800; color: var(--blue); }
+.kpi-lbl-mini { font-size: 0.66rem; font-weight: 600; color: #94A3B8; margin-top: 2px; }
+.hier-chart { height: 50px; display: flex; align-items: flex-end; gap: 5px; }
+.hb { flex: 1; border-radius: 2px 2px 0 0; background: var(--blue); opacity: 0.3; }
+.hb.hi { opacity: 1; }
+.hier-note { font-size: 0.74rem; font-weight: 500; color: #94A3B8; margin-top: 10px; text-align: center; font-style: italic; }
+
+.design-spectrum { margin: 20px 0; }
+.ds-row { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
+.ds-label { font-size: 0.78rem; font-weight: 600; color: #64748B; width: 110px; flex-shrink: 0; }
+.ds-track { flex: 1; height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; }
+.ds-fill { height: 100%; border-radius: 4px; background: var(--blue); }
+.ds-val { font-size: 0.74rem; font-weight: 600; color: #94A3B8; width: 65px; text-align: right; flex-shrink: 0; }
+
+.realworld-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 18px 0; }
+.rw-card { border-radius: 12px; padding: 16px; border: 1px solid #E2E8F0; background: var(--white); text-align: center; }
+.rw-icon { font-size: 1.5rem; margin-bottom: 8px; }
+.rw-project { font-size: 0.78rem; font-weight: 800; color: var(--blue); margin-bottom: 6px; }
+.rw-desc { font-size: 0.76rem; font-weight: 500; color: #64748B; line-height: 1.6; }
+
+.comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 22px 0; }
+.comp-card { border-radius: 12px; padding: 18px; }
+.comp-old { background: #F8FAFC; border: 1px solid #E2E8F0; }
+.comp-new { background: #534ab70d; border: 1px solid #534ab733; }
+.comp-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+.comp-old .comp-label { color: #94A3B8; }
+.comp-new .comp-label { color: var(--blue); }
+.comp-item { font-size: 0.8rem; font-weight: 500; color: #64748B; line-height: 1.65; margin-bottom: 8px; display: flex; gap: 8px; align-items: flex-start; }
+.comp-new .comp-item { color: var(--navy); }
+
+.balance-card-wrap { background: var(--navy); border-radius: 16px; padding: 22px; margin: 22px 0; position: relative; overflow: hidden; }
+.bc-glow { position: absolute; width: 130px; height: 130px; border-radius: 50%; background: #534ab722; top: -30px; right: -30px; }
+.bc-label { font-size: 0.74rem; font-weight: 600; color: #94A3B8; margin-bottom: 4px; position: relative; z-index:1; }
+.bc-balance { font-size: 1.55rem; font-weight: 800; color: #fff; margin-bottom: 18px; position: relative; z-index:1; letter-spacing: -0.02em; }
+.bc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; position: relative; z-index: 1; }
+.bc-item { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+.bc-item-label { font-size: 0.72rem; font-weight: 600; color: #94A3B8; margin-bottom: 4px; }
+.bc-item-val { font-size: 0.98rem; font-weight: 800; color: #fff; }
+.bc-item-sub { font-size: 0.72rem; font-weight: 600; color: #a9a4e8; margin-top: 3px; }
+
+.income-streams { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 18px 0; }
+.stream-card { border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; text-align: center; background: var(--white); }
+.stream-pct { font-size: 1.25rem; font-weight: 800; color: var(--blue); }
+.stream-amt { font-size: 0.8rem; font-weight: 600; color: #475569; margin-top: 3px; }
+.stream-name { font-size: 0.72rem; font-weight: 500; color: #94A3B8; margin-top: 6px; padding-top: 9px; border-top: 1px solid #EEF1F5; }
+
+.spend-section, .weekly-chart { background: #F8FAFC; border-radius: 12px; padding: 18px; margin: 18px 0; }
+.spend-title, .weekly-title { font-size: 0.7rem; font-weight: 700; color: #64748B; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
+.spend-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.spend-row:last-child { margin-bottom: 0; }
+.spend-name { font-size: 0.8rem; font-weight: 600; color: #475569; width: 92px; flex-shrink: 0; }
+.spend-track { flex: 1; background: #fff; border: 1px solid #E2E8F0; border-radius: 4px; height: 10px; overflow: hidden; }
+.spend-fill { height: 100%; border-radius: 4px; background: var(--blue); }
+.spend-val { font-size: 0.78rem; font-weight: 600; color: #475569; width: 58px; text-align: right; flex-shrink: 0; }
+
+.weekly-bars { display: flex; align-items: flex-end; gap: 7px; height: 64px; }
+.wb { flex: 1; border-radius: 3px 3px 0 0; background: var(--blue); opacity: 0.35; }
+.wb.peak { opacity: 1; }
+.weekly-labels { display: flex; gap: 7px; margin-top: 8px; }
+.wl { flex: 1; text-align: center; font-size: 0.74rem; font-weight: 600; color: #94A3B8; }
+.wl.peak { color: var(--blue); font-weight: 800; }
+
+.savings-wrap { display: flex; align-items: center; gap: 20px; background: #F8FAFC; border-radius: 14px; padding: 20px; margin: 18px 0; }
+.savings-ring { flex-shrink: 0; }
+.savings-rate { font-size: 1.7rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+.savings-label { font-size: 0.78rem; font-weight: 600; color: #64748B; margin-top: 2px; }
+.savings-desc { font-size: 0.82rem; font-weight: 500; color: #64748B; line-height: 1.65; margin-top: 8px; }
+
+.conclusion-box { background: var(--navy); border-radius: 16px; padding: 26px 28px; margin: 26px 0 36px; }
+.conclusion-box p { font-size: 0.93rem; font-weight: 500; color: #CBD5E1; line-height: 1.8; margin: 0; }
+
+.tags-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.tag-pill { font-size: 0.78rem; font-weight: 700; padding: 6px 14px; border-radius: 20px; background: #F1F5F9; color: #475569; border: 1px solid #E2E8F0; }
+
+.more-section-title { font-size: 1.02rem; font-weight: 800; color: var(--navy); margin-bottom: 18px; letter-spacing: -0.02em; }
+.more-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 50px; }
+.more-card { display: block; border: 1px solid #E2E8F0; border-radius: 14px; padding: 16px; text-decoration: none; transition: border-color .2s, transform .2s; background: var(--white); }
+.more-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+.more-badge { display: inline-block; font-size: 0.66rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
+.more-title { font-size: 0.84rem; font-weight: 700; color: var(--navy); line-height: 1.45; margin-bottom: 8px; }
+.more-time { font-size: 0.72rem; font-weight: 600; color: #94A3B8; }
+
+.footer-name { font-size: 0.85rem; font-weight: 600; color: #94A3B8; }
+.footer-btn { background: var(--blue); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+
+@media (max-width: 768px) {
+  .stat-row { grid-template-columns: 1fr; }
+  .dashboard-compare { grid-template-columns: 1fr; }
+  .realworld-grid { grid-template-columns: 1fr; }
+  .comparison { grid-template-columns: 1fr; }
+  .income-streams { grid-template-columns: 1fr; }
+  .more-grid { grid-template-columns: 1fr; }
+  .bc-row { grid-template-columns: 1fr; }
+}
+
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 4%; height: 70px;
+  background:
+    radial-gradient(circle at 15% 50%, #3c348912 0%, transparent 60%),
+    radial-gradient(circle at 85% 50%, #534ab714 0%, transparent 60%),
+    rgba(248,250,252,0.9);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: 1px solid #3c34891a;
+  overflow: hidden;
+}
+nav::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #3c3489 18%, #534ab7 30%, transparent 48%, transparent 100%);
+  background-size: 200% 100%;
+  animation: navSweep 7s linear infinite;
+}
+.nav-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(#3c34890d 1px, transparent 1px),
+    linear-gradient(90deg, #3c34890d 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.6) 70%, transparent);
+  mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.6) 70%, transparent);
+  pointer-events: none;
+}
+@keyframes navSweep { from { background-position: 200% 0; } to { background-position: -50% 0; } }
+
+.nav-logo { position: relative; z-index: 1; display: flex; align-items: center; gap: 11px; text-decoration: none; }
+.nav-logo-mark {
+  position: relative;
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  background: linear-gradient(135deg, #3c3489 0%, #534ab7 100%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px #3c348950, inset 0 1px 1px rgba(255,255,255,0.25);
+  overflow: hidden;
+}
+.nav-logo-mark::before {
+  content: '';
+  position: absolute; inset: -40%;
+  background: conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.5) 8%, transparent 18%);
+  animation: badgeSheen 4.5s linear infinite;
+}
+.nav-logo-mark-text {
+  position: relative; z-index: 1;
+  font-family: 'Manrope', sans-serif; font-size: 0.74rem; font-weight: 800;
+  color: #fff; letter-spacing: 0.01em;
+}
+@keyframes badgeSheen { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.nav-logo-text { position: relative; z-index: 1; display: flex; flex-direction: column; line-height: 1.2; }
+.nav-logo-name { font-size: 1rem; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; white-space: nowrap; }
+.back-link {
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none;
+}
+.back-link:hover { color: #3c3489; }
+.back-link svg { width: 16px; height: 16px; }
+
+.hero {
+  background: linear-gradient(135deg, var(--navy), #131c2e);
+  padding: 64px 4% 56px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -160px; right: -140px;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, #3c34892e 0%, #534ab712 45%, transparent 72%);
+  animation: heroFloat 14s ease-in-out infinite;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -180px; left: 6%;
+  width: 380px; height: 380px; border-radius: 50%;
+  background: radial-gradient(circle, #534ab71f 0%, transparent 70%);
+  animation: heroFloat 18s ease-in-out infinite reverse;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 85%);
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 85%);
+  pointer-events: none;
+  animation: gridDrift 26s linear infinite;
+}
+.hero-ring {
+  position: absolute; border-radius: 50%;
+  border: 1.5px dashed rgba(255,255,255,0.12);
+  pointer-events: none;
+}
+.hero-ring--1 { width: 280px; height: 280px; top: 10%; right: 8%; animation: heroSpin 45s linear infinite; }
+.hero-ring--2 { width: 160px; height: 160px; top: 22%; right: 18%; border-color: #534ab730; animation: heroSpin 32s linear infinite reverse; }
+.hero-diamond {
+  position: absolute; top: 30%; right: 30%;
+  width: 10px; height: 10px; background: #534ab755;
+  transform: rotate(45deg); border-radius: 2px;
+  animation: heroFloat 10s ease-in-out infinite;
+}
+@keyframes heroFloat { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-12px, 16px); } }
+@keyframes heroSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes gridDrift { 0% { background-position: 0 0; } 100% { background-position: 42px 42px; } }
+
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-tag-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #534ab7; flex-shrink: 0;
+  box-shadow: 0 0 0 0 #534ab799;
+  animation: dotPulse 2.2s ease-out infinite;
+}
+@keyframes dotPulse {
+  0% { box-shadow: 0 0 0 0 #534ab780; }
+  70% { box-shadow: 0 0 0 6px #534ab700; }
+  100% { box-shadow: 0 0 0 0 #534ab700; }
+}
+
+footer { background: var(--navy); padding: 32px 4%; position: relative; overflow: hidden; }
+footer::before {
+  content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+  width: 480px; height: 220px;
+  background: radial-gradient(ellipse, #3c34891f 0%, transparent 70%);
+  pointer-events: none;
+}
+.footer-inner {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  position: relative; z-index: 1;
+}
+.footer-brand-row { display: flex; align-items: center; gap: 11px; }
+.footer-brand-mark {
+  position: relative;
+  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  background: linear-gradient(135deg, #3c3489, #534ab7);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px #3c348950, inset 0 1px 1px rgba(255,255,255,0.25);
+  overflow: hidden;
+}
+.footer-brand-mark::before {
+  content: '';
+  position: absolute; inset: -40%;
+  background: conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.5) 8%, transparent 18%);
+  animation: badgeSheen 4.5s linear infinite;
+}
+.footer-brand-mark span {
+  position: relative; z-index: 1;
+  font-family: 'Manrope', sans-serif; font-size: 0.7rem; font-weight: 800; color: #fff;
+}
+.footer-name { font-size: 0.85rem; font-weight: 600; color: #94A3B8; }
+.footer-btn {
+  background: #3c3489; color: #fff; padding: 10px 20px; border-radius: 8px;
+  font-size: 0.85rem; font-weight: 700; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background .25s, transform .25s;
+}
+.footer-btn:hover { background: #534ab7; transform: translateY(-2px); }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-grid"></div>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-mark"><span class="nav-logo-mark-text">OR</span></div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Ogunleye Rapheal A.</span>
+    </div>
+  </a>
+  <a href="../index.html#blog" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    All Articles
+  </a>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-ring hero-ring--1"></div>
+  <div class="hero-ring hero-ring--2"></div>
+  <div class="hero-diamond"></div>
+  <div class="hero-inner">
+    <span class="hero-tag">Financial Insights</span>
+    <h1 class="hero-title">The Rise of Personal Finance Dashboards — Taking Control of Your Money With Data</h1>
+    <div class="hero-meta">
+      <span class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>5 min read</span>
+      <span class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>May 2025</span>
+      <span class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Ogunleye R.A.</span>
+    </div>
+  </div>
+</div>
+
+<div class="article">
+  <div class="author-row">
+    <div class="author-avatar">RO</div>
+    <div>
+      <div class="author-name">Ogunleye R.A.</div>
+      <div class="author-role">Data Analyst, MS Excel, Power BI, Data Visualisation</div>
+    </div>
+  </div>
+
+  <div class="body-content">
+    
+<p>For decades, personal financial management meant a budget in a notebook, or at best, a spreadsheet with monthly income and expenses. Today, data tools once reserved for enterprise finance departments are accessible to anyone, and increasingly, they are being used to transform how individuals understand and manage their money.</p>
+
+<div class="stat-row">
+  <div class="stat-box"><div class="stat-val">54%</div><div class="stat-lbl">net savings rate achieved in this dashboard</div></div>
+  <div class="stat-box"><div class="stat-val">3</div><div class="stat-lbl">income streams tracked in one unified view</div></div>
+  <div class="stat-box"><div class="stat-val">$35.2K</div><div class="stat-lbl">net balance surfaced from 10 months of data</div></div>
+</div>
+
+<h3>Why data visibility changes financial behaviour</h3>
+<p>There is a well-documented principle in behavioural economics: people spend less when they can see their spending in real time. The challenge is that most people's financial data is scattered, sitting across bank apps, spreadsheets, payslips, and invoices. A personal finance dashboard brings all of that together into a single, always-updated view.</p>
+
+<div class="highlight-box">
+  <p>When you can see at a glance that Monday is consistently your highest spending day, or that entertainment costs have quietly climbed over a few months, you gain the awareness needed to make better choices, without needing to be a finance expert.</p>
+</div>
+
+<h3>A real dashboard, built in MS Excel</h3>
+<p>The Personal Finance Tracker below was built entirely in MS Excel, using a dark banking-app aesthetic to make financial data feel familiar and approachable rather than intimidating. Every number is real, drawn from 10 months of actual income and spending data across multiple sources.</p>
+
+<div class="balance-card-wrap">
+  <div class="bc-glow"></div>
+  <div class="bc-label">Available balance</div>
+  <div class="bc-balance">$35,249</div>
+  <div class="bc-row">
+    <div class="bc-item">
+      <div class="bc-item-label">Total income</div>
+      <div class="bc-item-val">$65,440</div>
+      <div class="bc-item-sub">↑ across 3 sources</div>
+    </div>
+    <div class="bc-item">
+      <div class="bc-item-label">Total spending</div>
+      <div class="bc-item-val">$30,191</div>
+      <div class="bc-item-sub">↓ 54% savings rate</div>
+    </div>
+  </div>
+</div>
+
+<h3>The multi-income reality of modern work</h3>
+<p>The traditional single-salary income model is evolving rapidly. More professionals today earn from multiple sources: a primary job, freelance work, digital content, online courses, or investments. Managing this complexity requires more than a simple income field in a spreadsheet.</p>
+<p>In this dashboard, income from three distinct streams is tracked, visualised, and benchmarked against spending, giving a clear picture of which sources are growing and where to invest more time and effort.</p>
+
+<div class="income-streams">
+  <div class="stream-card">
+    <div class="stream-pct">76%</div>
+    <div class="stream-amt">$50,000</div>
+    <div class="stream-name">Data with Decisions</div>
+  </div>
+  <div class="stream-card">
+    <div class="stream-pct">17%</div>
+    <div class="stream-amt">$10,940</div>
+    <div class="stream-name">YouTube</div>
+  </div>
+  <div class="stream-card">
+    <div class="stream-pct">7%</div>
+    <div class="stream-amt">$4,500</div>
+    <div class="stream-name">Teachable</div>
+  </div>
+</div>
+
+<h3>Where the money is actually going</h3>
+<p>Knowing your total spending is useful. Knowing exactly which categories are consuming the most budget is transformative. The dashboard breaks expenditure into five clear categories, surfacing insights that most budgeting apps bury in tiny pie-chart slices.</p>
+
+<div class="spend-section">
+  <div class="spend-title">Top spending categories</div>
+  <div class="spend-row"><span class="spend-name">Housing</span><div class="spend-track"><div class="spend-fill" style="width:100%"></div></div><span class="spend-val">$9,000</span></div>
+  <div class="spend-row"><span class="spend-name">Groceries</span><div class="spend-track"><div class="spend-fill" style="width:72%"></div></div><span class="spend-val">$6,454</span></div>
+  <div class="spend-row"><span class="spend-name">Clothes</span><div class="spend-track"><div class="spend-fill" style="width:48%"></div></div><span class="spend-val">$4,304</span></div>
+  <div class="spend-row"><span class="spend-name">Entertainment</span><div class="spend-track"><div class="spend-fill" style="width:20%"></div></div><span class="spend-val">$1,813</span></div>
+  <div class="spend-row"><span class="spend-name">Bank loan</span><div class="spend-track"><div class="spend-fill" style="width:17%"></div></div><span class="spend-val">$1,500</span></div>
+</div>
+
+<p>Housing at $9,000 consumes nearly 30% of total spending, making it the single biggest lever for financial optimisation. Groceries and clothing together add another 35%. Knowing this breakdown is the first step to making intentional decisions rather than reactive ones.</p>
+
+<h3>The pattern most people never see: weekly spending</h3>
+<p>One of the most surprising insights from this dashboard is the weekly spending trend. While most people think of budgeting in monthly terms, the data tells a more granular story, and Monday stands out clearly as the peak spending day every week.</p>
+
+<div class="weekly-chart">
+  <div class="weekly-title">Spending by day of week</div>
+  <div class="weekly-bars">
+    <div class="wb peak" style="height:100%"></div>
+    <div class="wb" style="height:45%"></div>
+    <div class="wb" style="height:52%"></div>
+    <div class="wb" style="height:58%"></div>
+    <div class="wb" style="height:48%"></div>
+    <div class="wb" style="height:35%"></div>
+    <div class="wb" style="height:28%"></div>
+  </div>
+  <div class="weekly-labels">
+    <div class="wl peak">Mon</div><div class="wl">Tue</div><div class="wl">Wed</div><div class="wl">Thu</div><div class="wl">Fri</div><div class="wl">Sat</div><div class="wl">Sun</div>
+  </div>
+</div>
+
+<p>This kind of weekly pattern is nearly impossible to spot from a monthly bank statement. But once visible, it is immediately actionable. A conscious Monday spending limit or a 24-hour purchase review rule on Mondays could meaningfully reduce total monthly expenditure.</p>
+
+<h3>Financial empowerment through data</h3>
+<div class="savings-wrap">
+  <div class="savings-ring">
+    <svg width="80" height="80" viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="30" fill="none" stroke="#E2E8F0" stroke-width="8"/>
+      <circle cx="40" cy="40" r="30" fill="none" stroke="#534ab7" stroke-width="8"
+        stroke-dasharray="188.5" stroke-dashoffset="86.7"
+        stroke-linecap="round" transform="rotate(-90 40 40)"/>
+    </svg>
+  </div>
+  <div class="savings-text">
+    <div class="savings-rate">54%</div>
+    <div class="savings-label">Net savings rate</div>
+    <div class="savings-desc">Spending $30.2K against $65.4K in income. Well above the recommended 20% benchmark and a strong indicator of overall financial health.</div>
+  </div>
+</div>
+
+<p>The Personal Finance Tracker demonstrated a net savings rate of 54%, but the more important value was the visibility it created. Seeing that housing represents nearly 30% of total expenditure, or that a digital Teachable course generating $4,500 is essentially passive income with high growth potential, creates the foundation for informed financial decision-making.</p>
+
+<div class="highlight-box">
+  <p>Data does not just tell you what happened. It tells you what to do next. Whether you are managing a household budget, scaling a side hustle, or planning for financial independence, a personal finance dashboard built on solid data is one of the most powerful tools available to the modern professional.</p>
+</div>
+
+<h3>What a personal finance dashboard should show</h3>
+<div class="list-item"><div class="list-dot"></div><div class="list-text">Net balance at a glance, always know your current financial position without logging into multiple apps.</div></div>
+<div class="list-item"><div class="list-dot"></div><div class="list-text">Income vs. spending trends, monthly and weekly views to spot anomalies and seasonal patterns early.</div></div>
+<div class="list-item"><div class="list-dot"></div><div class="list-text">Category breakdown: where exactly is the money going? Housing, food, entertainment, debt repayment?</div></div>
+<div class="list-item"><div class="list-dot"></div><div class="list-text">Income source contribution: what percentage of your income comes from each stream, and which is growing?</div></div>
+<div class="list-item"><div class="list-dot"></div><div class="list-text">Savings rate, the most important metric in personal finance, and one most people never consciously calculate.</div></div>
+
+<div class="conclusion-box">
+  <p>Enterprise BI tools belong in everyone's hands, not just corporate finance teams. An MS Excel personal finance dashboard does not just track your money. It shows you the patterns in how you earn it, spend it, and save it, giving you the clarity to make smarter, more intentional financial decisions every single day.</p>
+</div>
+
+  </div>
+
+  <div class="tags-row"><span class="tag-pill">Personal Finance</span><span class="tag-pill">MS Excel</span><span class="tag-pill">Financial Analytics</span><span class="tag-pill">Income Tracking</span><span class="tag-pill">Spending Trends</span></div>
+
+  <div class="more-section-title">More articles</div>
+  <div class="more-grid">
+    <a href="spreadsheets-to-dashboards.html" target="_blank" class="more-card">
+      <span class="more-badge" style="background:#e6f1fb;color:#0c447c;">Analytics Trends</span>
+      <div class="more-title">From Spreadsheets to Dashboards</div>
+      <div class="more-time">5 min read</div>
+    </a>
+    <a href="sales-analytics-insights.html" target="_blank" class="more-card">
+      <span class="more-badge" style="background:#e1f5ee;color:#085041;">Sales Analytics</span>
+      <div class="more-title">5 Sales Analytics Insights That Most Businesses Miss</div>
+      <div class="more-time">6 min read</div>
+    </a>
+    <a href="data-storytelling.html" target="_blank" class="more-card">
+      <span class="more-badge" style="background:#faeeda;color:#633806;">Dashboard Design</span>
+      <div class="more-title">Data Storytelling — Why the Best Dashboards Speak to People</div>
+      <div class="more-time">4 min read</div>
+    </a></div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand-row">
+      <div class="footer-brand-mark"><span>OR</span></div>
+      <div class="footer-name">Ogunleye Rapheal A.</div>
+    </div>
+    <a href="../index.html#blog" class="footer-btn">
+    Back to all articles
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+  </a>
+  </div>
+</footer>
+
+</body>
+</html>
