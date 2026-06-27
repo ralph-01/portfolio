@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Data Storytelling — Why the Best Dashboards Speak to People, Not Just Analysts | Ogunleye Rapheal A. Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0B1120; --blue: #854f0b; --blue-light: #d4a265;
+  --white: #FFFFFF; --surface: #F8FAFC;
+}
+body { font-family: 'Manrope', sans-serif; background: var(--surface); color: var(--navy); line-height: 1.6; }
+
+.back-link:hover { color: var(--blue); }
+.back-link svg { width: 16px; height: 16px; }
+
+.hero {
+  background: linear-gradient(135deg, var(--navy), #131c2e);
+  padding: 64px 4% 56px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -120px; right: -120px;
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, #854f0b33 0%, transparent 70%);
+}
+.hero-inner { max-width: 720px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.hero-tag {
+  display: inline-block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em;
+  color: #fff; text-transform: uppercase; margin-bottom: 1rem;
+  background: rgba(255,255,255,0.12); padding: 5px 14px; border-radius: 20px;
+}
+.hero-title { font-size: clamp(1.6rem, 3.2vw, 2.3rem); font-weight: 800; color: #fff; letter-spacing: -0.03em; margin-bottom: 1.2rem; line-height: 1.3; }
+.hero-meta { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.hero-meta-item { font-size: 0.82rem; font-weight: 600; color: #d4a265; display: flex; align-items: center; gap: 6px; }
+.hero-meta-item svg { width: 14px; height: 14px; }
+
+.article { max-width: 700px; margin: 0 auto; padding: 44px 4% 0; }
+
+.author-row {
+  display: flex; align-items: center; gap: 12px; padding: 16px;
+  background: var(--white); border: 1px solid #E2E8F0; border-radius: 14px; margin-bottom: 36px;
+}
+.author-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: #854f0b1a; color: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 800; flex-shrink: 0;
+}
+.author-name { font-size: 0.88rem; font-weight: 700; color: var(--navy); }
+.author-role { font-size: 0.78rem; font-weight: 500; color: #64748B; }
+
+.body-content { font-size: 0.97rem; font-weight: 500; color: #475569; line-height: 1.85; }
+.body-content p { margin-bottom: 18px; }
+.body-content h3 { font-size: 1.15rem; font-weight: 800; color: var(--navy); margin: 36px 0 14px; letter-spacing: -0.02em; }
+
+.stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 24px 0; }
+.stat-box { background: var(--white); border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; text-align: center; }
+.stat-val { font-size: 1.3rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+.stat-lbl { font-size: 0.74rem; font-weight: 600; color: #64748B; margin-top: 4px; line-height: 1.4; }
+
+.highlight-box {
+  background: #854f0b1a; border-left: 3px solid var(--blue);
+  border-radius: 0 12px 12px 0; padding: 18px 22px; margin: 22px 0;
+}
+.highlight-box p { font-size: 0.9rem; font-weight: 600; color: var(--navy); line-height: 1.7; margin: 0; }
+
+.pull-quote { border-left: 3px solid var(--blue); padding: 12px 22px; margin: 28px 0; }
+.pull-quote p { font-size: 1.08rem; font-weight: 600; color: var(--navy); line-height: 1.6; font-style: italic; }
+
+.list-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.list-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 7px; }
+.list-text { font-size: 0.92rem; font-weight: 500; color: #475569; line-height: 1.75; }
+
+.principle-card { border: 1px solid #E2E8F0; border-radius: 14px; overflow: hidden; margin-bottom: 16px; background: var(--white); }
+.principle-header { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+.principle-icon { width: 36px; height: 36px; border-radius: 10px; background: #854f0b1a; color: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; font-weight: 800; }
+.principle-label { font-size: 0.68rem; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.05em; }
+.principle-title { font-size: 0.92rem; font-weight: 700; color: var(--navy); }
+.principle-body { padding: 18px; }
+.principle-body p { font-size: 0.87rem; font-weight: 500; color: #64748B; line-height: 1.75; margin-bottom: 10px; }
+.principle-body p:last-child { margin-bottom: 0; }
+
+.dashboard-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 22px 0; }
+.dash-card { border-radius: 12px; overflow: hidden; border: 1px solid #E2E8F0; }
+.dash-label { font-size: 0.7rem; font-weight: 700; padding: 9px 12px; text-align: center; text-transform: uppercase; letter-spacing: 0.05em; }
+.dash-bad .dash-label { background: #FEF2F2; color: #B91C1C; border-bottom: 1px solid #FCA5A5; }
+.dash-good .dash-label { background: #F0FDF4; color: #166534; border-bottom: 1px solid #86EFAC; }
+.dash-content { padding: 13px; background: #F8FAFC; }
+.dash-row { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; font-size: 0.78rem; font-weight: 500; color: #64748B; }
+.dash-row .x { color: #EF4444; font-weight: 800; }
+.dash-row .ck { color: #22C55E; font-weight: 800; }
+
+.hierarchy-demo { background: #F8FAFC; border-radius: 12px; padding: 18px; margin: 16px 0; border: 1px solid #E2E8F0; }
+.hier-title { font-size: 0.7rem; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px; }
+.kpi-strip-mini { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
+.kpi-box-mini { background: #fff; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; text-align: center; }
+.kpi-val-mini { font-size: 0.92rem; font-weight: 800; color: var(--blue); }
+.kpi-lbl-mini { font-size: 0.66rem; font-weight: 600; color: #94A3B8; margin-top: 2px; }
+.hier-chart { height: 50px; display: flex; align-items: flex-end; gap: 5px; }
+.hb { flex: 1; border-radius: 2px 2px 0 0; background: var(--blue); opacity: 0.3; }
+.hb.hi { opacity: 1; }
+.hier-note { font-size: 0.74rem; font-weight: 500; color: #94A3B8; margin-top: 10px; text-align: center; font-style: italic; }
+
+.design-spectrum { margin: 20px 0; }
+.ds-row { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
+.ds-label { font-size: 0.78rem; font-weight: 600; color: #64748B; width: 110px; flex-shrink: 0; }
+.ds-track { flex: 1; height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; }
+.ds-fill { height: 100%; border-radius: 4px; background: var(--blue); }
+.ds-val { font-size: 0.74rem; font-weight: 600; color: #94A3B8; width: 65px; text-align: right; flex-shrink: 0; }
+
+.realworld-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 18px 0; }
+.rw-card { border-radius: 12px; padding: 16px; border: 1px solid #E2E8F0; background: var(--white); text-align: center; }
+.rw-icon { font-size: 1.5rem; margin-bottom: 8px; }
+.rw-project { font-size: 0.78rem; font-weight: 800; color: var(--blue); margin-bottom: 6px; }
+.rw-desc { font-size: 0.76rem; font-weight: 500; color: #64748B; line-height: 1.6; }
+
+.conclusion-box { background: var(--navy); border-radius: 16px; padding: 26px 28px; margin: 26px 0 36px; }
+.conclusion-box p { font-size: 0.93rem; font-weight: 500; color: #CBD5E1; line-height: 1.8; margin: 0; }
+
+.tags-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.tag-pill { font-size: 0.78rem; font-weight: 700; padding: 6px 14px; border-radius: 20px; background: #F1F5F9; color: #475569; border: 1px solid #E2E8F0; }
+
+.more-section-title { font-size: 1.02rem; font-weight: 800; color: var(--navy); margin-bottom: 18px; letter-spacing: -0.02em; }
+.more-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 50px; }
+.more-card { display: block; border: 1px solid #E2E8F0; border-radius: 14px; padding: 16px; text-decoration: none; transition: border-color .2s, transform .2s; background: var(--white); }
+.more-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+.more-badge { display: inline-block; font-size: 0.66rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
+.more-title { font-size: 0.84rem; font-weight: 700; color: var(--navy); line-height: 1.45; margin-bottom: 8px; }
+.more-time { font-size: 0.72rem; font-weight: 600; color: #94A3B8; }
+
+.footer-name { font-size: 0.85rem; font-weight: 600; color: #94A3B8; }
+.footer-btn { background: var(--blue); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+
+@media (max-width: 768px) {
+  .stat-row { grid-template-columns: 1fr; }
+  .dashboard-compare { grid-template-columns: 1fr; }
+  .realworld-grid { grid-template-columns: 1fr; }
+  .more-grid { grid-template-columns: 1fr; }
+}
+
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 4%; height: 70px;
+  background:
+    radial-gradient(circle at 15% 50%, #63380612 0%, transparent 60%),
+    radial-gradient(circle at 85% 50%, #854f0b14 0%, transparent 60%),
+    rgba(248,250,252,0.9);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: 1px solid #6338061a;
+  overflow: hidden;
+}
+nav::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #633806 18%, #854f0b 30%, transparent 48%, transparent 100%);
+  background-size: 200% 100%;
+  animation: navSweep 7s linear infinite;
+}
+.nav-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(#6338060d 1px, transparent 1px),
+    linear-gradient(90deg, #6338060d 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.6) 70%, transparent);
+  mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.6) 70%, transparent);
+  pointer-events: none;
+}
+@keyframes navSweep { from { background-position: 200% 0; } to { background-position: -50% 0; } }
+
+.nav-logo { position: relative; z-index: 1; display: flex; align-items: center; gap: 11px; text-decoration: none; }
+.nav-logo-mark {
+  position: relative;
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  background: linear-gradient(135deg, #633806 0%, #854f0b 100%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px #63380650, inset 0 1px 1px rgba(255,255,255,0.25);
+  overflow: hidden;
+}
+.nav-logo-mark::before {
+  content: '';
+  position: absolute; inset: -40%;
+  background: conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.5) 8%, transparent 18%);
+  animation: badgeSheen 4.5s linear infinite;
+}
+.nav-logo-mark-text {
+  position: relative; z-index: 1;
+  font-family: 'Manrope', sans-serif; font-size: 0.74rem; font-weight: 800;
+  color: #fff; letter-spacing: 0.01em;
+}
+@keyframes badgeSheen { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.nav-logo-text { position: relative; z-index: 1; display: flex; flex-direction: column; line-height: 1.2; }
+.nav-logo-name { font-size: 1rem; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; white-space: nowrap; }
+.back-link {
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none;
+}
+.back-link:hover { color: #633806; }
+.back-link svg { width: 16px; height: 16px; }
+
+.hero {
+  background: linear-gradient(135deg, var(--navy), #131c2e);
+  padding: 64px 4% 56px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -160px; right: -140px;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, #6338062e 0%, #854f0b12 45%, transparent 72%);
+  animation: heroFloat 14s ease-in-out infinite;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -180px; left: 6%;
+  width: 380px; height: 380px; border-radius: 50%;
+  background: radial-gradient(circle, #854f0b1f 0%, transparent 70%);
+  animation: heroFloat 18s ease-in-out infinite reverse;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 85%);
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 85%);
+  pointer-events: none;
+  animation: gridDrift 26s linear infinite;
+}
+.hero-ring {
+  position: absolute; border-radius: 50%;
+  border: 1.5px dashed rgba(255,255,255,0.12);
+  pointer-events: none;
+}
+.hero-ring--1 { width: 280px; height: 280px; top: 10%; right: 8%; animation: heroSpin 45s linear infinite; }
+.hero-ring--2 { width: 160px; height: 160px; top: 22%; right: 18%; border-color: #854f0b30; animation: heroSpin 32s linear infinite reverse; }
+.hero-diamond {
+  position: absolute; top: 30%; right: 30%;
+  width: 10px; height: 10px; background: #854f0b55;
+  transform: rotate(45deg); border-radius: 2px;
+  animation: heroFloat 10s ease-in-out infinite;
+}
+@keyframes heroFloat { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-12px, 16px); } }
+@keyframes heroSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes gridDrift { 0% { background-position: 0 0; } 100% { background-position: 42px 42px; } }
+
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-tag-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #854f0b; flex-shrink: 0;
+  box-shadow: 0 0 0 0 #854f0b99;
+  animation: dotPulse 2.2s ease-out infinite;
+}
+@keyframes dotPulse {
+  0% { box-shadow: 0 0 0 0 #854f0b80; }
+  70% { box-shadow: 0 0 0 6px #854f0b00; }
+  100% { box-shadow: 0 0 0 0 #854f0b00; }
+}
+
+footer { background: var(--navy); padding: 32px 4%; position: relative; overflow: hidden; }
+footer::before {
+  content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+  width: 480px; height: 220px;
+  background: radial-gradient(ellipse, #6338061f 0%, transparent 70%);
+  pointer-events: none;
+}
+.footer-inner {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  position: relative; z-index: 1;
+}
+.footer-brand-row { display: flex; align-items: center; gap: 11px; }
+.footer-brand-mark {
+  position: relative;
+  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  background: linear-gradient(135deg, #633806, #854f0b);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px #63380650, inset 0 1px 1px rgba(255,255,255,0.25);
+  overflow: hidden;
+}
+.footer-brand-mark::before {
+  content: '';
+  position: absolute; inset: -40%;
+  background: conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.5) 8%, transparent 18%);
+  animation: badgeSheen 4.5s linear infinite;
+}
+.footer-brand-mark span {
+  position: relative; z-index: 1;
+  font-family: 'Manrope', sans-serif; font-size: 0.7rem; font-weight: 800; color: #fff;
+}
+.footer-name { font-size: 0.85rem; font-weight: 600; color: #94A3B8; }
+.footer-btn {
+  background: #633806; color: #fff; padding: 10px 20px; border-radius: 8px;
+  font-size: 0.85rem; font-weight: 700; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background .25s, transform .25s;
+}
+.footer-btn:hover { background: #854f0b; transform: translateY(-2px); }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-grid"></div>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-mark"><span class="nav-logo-mark-text">OR</span></div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Ogunleye Rapheal A.</span>
+    </div>
+  </a>
+  <a href="../index.html#blog" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    All Articles
+  </a>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-ring hero-ring--1"></div>
+  <div class="hero-ring hero-ring--2"></div>
+  <div class="hero-diamond"></div>
+  <div class="hero-inner">
+    <span class="hero-tag">Dashboard Design</span>
+    <h1 class="hero-title">Data Storytelling — Why the Best Dashboards Speak to People, Not Just Analysts</h1>
+    <div class="hero-meta">
+      <span class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>4 min read</span>
+      <span class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>May 2025</span>
+      <span class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Ogunleye R.A.</span>
+    </div>
+  </div>
+</div>
+
+<div class="article">
+  <div class="author-row">
+    <div class="author-avatar">RO</div>
+    <div>
+      <div class="author-name">Ogunleye R.A.</div>
+      <div class="author-role">Data Analyst — MS Excel, Power BI, Data Visualisation</div>
+    </div>
+  </div>
+
+  <div class="body-content">
+
+<p>There is a critical difference between a dashboard that displays data and a dashboard that tells a story. One answers the question "What are the numbers?" The other answers "What do the numbers mean, and what should we do about them?" The best dashboards sit firmly in the second category. And the difference comes down to design thinking, not just data skill.</p>
+
+<div class="stat-row">
+  <div class="stat-box"><div class="stat-val">3</div><div class="stat-lbl">core principles behind every great dashboard</div></div>
+  <div class="stat-box"><div class="stat-val">1</div><div class="stat-lbl">question every dashboard must answer clearly</div></div>
+  <div class="stat-box"><div class="stat-val">∞</div><div class="stat-lbl">decisions a well-told data story can unlock</div></div>
+</div>
+
+<div class="pull-quote">
+  <p>"Your job as a data analyst is not finished when the data is correct. It is finished when the person reading the dashboard understands what to do next."</p>
+</div>
+
+<h3>The insight-first principle</h3>
+<p>Every dashboard should be designed around the decisions it needs to support, not around the data that happens to be available. Before building a single visual, the best analysts ask: "What question is this dashboard answering? Who will read it? What action do I want them to take?"</p>
+<p>This insight-first approach is what separates a reporting tool from a decision-making engine. Data without a question is just noise. A dashboard without a decision to support is just decoration.</p>
+
+<div class="highlight-box">
+  <p>Before building a single visual, write down the single most important question your dashboard needs to answer. Every element you add should either answer that question directly or provide context that helps the reader understand the answer better.</p>
+</div>
+
+<h3>The three principles of a compelling data story</h3>
+
+<div class="principle-card">
+  <div class="principle-header">
+    <div class="principle-icon">①</div>
+    <div>
+      <div class="principle-label">Principle 1</div>
+      <div class="principle-title">Context — numbers without meaning are just noise</div>
+    </div>
+  </div>
+  <div class="principle-body">
+    <p>A standalone number means nothing. "$307 million in revenue" is impressive, but only when placed alongside cost of goods ($180M), profit ($126M), and margin (41.1%) does it tell a story worth acting on.</p>
+    <p>The GloMark dashboard solved this by immediately surrounding every headline number with its natural context, showing not just what was earned, but what it cost, what remained, and how efficiently it was generated. Every KPI earned its place by making its neighbours more meaningful.</p>
+  </div>
+</div>
+
+<div class="principle-card">
+  <div class="principle-header">
+    <div class="principle-icon">②</div>
+    <div>
+      <div class="principle-label">Principle 2</div>
+      <div class="principle-title">Hierarchy — guide the eye, don't overwhelm it</div>
+    </div>
+  </div>
+  <div class="principle-body">
+    <p>Not all data is equally important. A great dashboard guides the reader's eye: the most critical KPIs sit at the top, with supporting detail available on demand through filters and drill-downs. This mirrors how humans naturally process information: headline first, detail second.</p>
+    <div class="hierarchy-demo">
+      <div class="hier-title">Example — visual hierarchy in action</div>
+      <div class="kpi-strip-mini">
+        <div class="kpi-box-mini"><div class="kpi-val-mini">$8M</div><div class="kpi-lbl-mini">Total Revenue</div></div>
+        <div class="kpi-box-mini"><div class="kpi-val-mini">20K</div><div class="kpi-lbl-mini">Units Sold</div></div>
+        <div class="kpi-box-mini"><div class="kpi-val-mini">41.4%</div><div class="kpi-lbl-mini">Top Category</div></div>
+      </div>
+      <div class="hier-chart">
+        <div class="hb" style="height:55%"></div>
+        <div class="hb" style="height:70%"></div>
+        <div class="hb hi" style="height:100%"></div>
+        <div class="hb" style="height:65%"></div>
+        <div class="hb" style="height:80%"></div>
+        <div class="hb" style="height:50%"></div>
+        <div class="hb" style="height:75%"></div>
+      </div>
+      <div class="hier-note">Headlines first → chart detail second → filters on demand</div>
+    </div>
+    <p>In the TECHNOVA dashboard, the KPI strip across the top gives any reader, whether analyst or executive, an immediate understanding of the business before a single chart is examined.</p>
+  </div>
+</div>
+
+<div class="principle-card">
+  <div class="principle-header">
+    <div class="principle-icon">③</div>
+    <div>
+      <div class="principle-label">Principle 3</div>
+      <div class="principle-title">Interactivity — answer questions you didn't know to ask</div>
+    </div>
+  </div>
+  <div class="principle-body">
+    <p>Static reports answer the question you thought to ask. Interactive dashboards answer the question you did not know you had.</p>
+    <p>When a sales manager filters the GloMark dashboard by country and immediately sees how profit margin, product mix, and weekday patterns shift in that specific context, the dashboard has just generated an insight that no static monthly report could ever have surfaced. That is the true power of interactivity: it turns passive reading into active discovery.</p>
+  </div>
+</div>
+
+<h3>The bad vs. good dashboard test</h3>
+<p>Here is a simple diagnostic. When someone outside your team looks at your dashboard for the first time, which of these matches their reaction?</p>
+
+<div class="dashboard-compare">
+  <div class="dash-card dash-bad">
+    <div class="dash-label">✕ Reporting dashboard</div>
+    <div class="dash-content">
+      <div class="dash-row"><span class="x">✕</span><span>Dozens of charts, no clear focus</span></div>
+      <div class="dash-row"><span class="x">✕</span><span>"What am I looking at?"</span></div>
+      <div class="dash-row"><span class="x">✕</span><span>Numbers without benchmarks</span></div>
+      <div class="dash-row"><span class="x">✕</span><span>Built for the analyst, not the reader</span></div>
+      <div class="dash-row"><span class="x">✕</span><span>No clear next action</span></div>
+    </div>
+  </div>
+  <div class="dash-card dash-good">
+    <div class="dash-label">✓ Storytelling dashboard</div>
+    <div class="dash-content">
+      <div class="dash-row"><span class="ck">✓</span><span>One clear question answered up front</span></div>
+      <div class="dash-row"><span class="ck">✓</span><span>"I see exactly what this means"</span></div>
+      <div class="dash-row"><span class="ck">✓</span><span>Context alongside every number</span></div>
+      <div class="dash-row"><span class="ck">✓</span><span>Designed for the decision-maker</span></div>
+      <div class="dash-row"><span class="ck">✓</span><span>Suggests a clear next step</span></div>
+    </div>
+  </div>
+</div>
+
+<h3>Design is not decoration</h3>
+<p>Dark themes, carefully chosen colour palettes, icon-based KPI cards, and consistent typography are not cosmetic choices. They reduce cognitive load, increase readability, and make it easier for non-technical stakeholders to absorb and trust what they are seeing.</p>
+
+<div class="design-spectrum">
+  <div class="ds-row"><span class="ds-label">Cognitive load</span><div class="ds-track"><div class="ds-fill" style="width:20%"></div></div><span class="ds-val">Minimised</span></div>
+  <div class="ds-row"><span class="ds-label">Readability</span><div class="ds-track"><div class="ds-fill" style="width:92%"></div></div><span class="ds-val">Maximised</span></div>
+  <div class="ds-row"><span class="ds-label">Stakeholder trust</span><div class="ds-track"><div class="ds-fill" style="width:88%"></div></div><span class="ds-val">Very high</span></div>
+  <div class="ds-row"><span class="ds-label">Time to insight</span><div class="ds-track"><div class="ds-fill" style="width:15%"></div></div><span class="ds-val">Seconds</span></div>
+</div>
+
+<p>The Personal Finance Tracker's banking-app aesthetic was entirely deliberate, and it made financial data feel familiar and approachable rather than intimidating. The TECHNOVA dashboard's clean white layout was designed for executive presentations where clarity matters more than complexity. Every design choice communicates something to the reader before they read a single number.</p>
+
+<h3>Data storytelling in practice — three real examples</h3>
+<div class="realworld-grid">
+  <div class="rw-card">
+    <div class="rw-icon">🌍</div>
+    <div class="rw-project">GloMark</div>
+    <div class="rw-desc">The story: "Q2 and mid-week are your profit window. Plan everything around them." Told through quarterly bars and a weekday breakdown that made the pattern impossible to miss.</div>
+  </div>
+  <div class="rw-card">
+    <div class="rw-icon">💻</div>
+    <div class="rw-project">TECHNOVA</div>
+    <div class="rw-desc">The story: "One rep is 35% above average. Find out why and teach it to everyone." Told through a ranked bar chart that made the performance gap immediately visible.</div>
+  </div>
+  <div class="rw-card">
+    <div class="rw-icon">💳</div>
+    <div class="rw-project">Finance Tracker</div>
+    <div class="rw-desc">The story: "You save 54% of your income, but Monday is quietly draining your budget." Told through a savings ring and a weekly spend chart in a single scroll.</div>
+  </div>
+</div>
+
+<div class="highlight-box">
+  <p>In data analytics, your job is not finished when the data is correct. It is finished when the person reading the dashboard understands what to do next. That is the true power of data storytelling, and it is the standard every dashboard should be held to.</p>
+</div>
+
+<div class="conclusion-box">
+  <p>The most powerful dashboards are not built by the analysts who know the most about data. They are built by analysts who understand people: how they think, what they need to decide, and what it takes to move them to action. Master the three principles of context, hierarchy, and interactivity, and your dashboards will stop being reports and start being conversations.</p>
+</div>
+
+  </div>
+
+  <div class="tags-row"><span class="tag-pill">Data Storytelling</span><span class="tag-pill">Dashboard Design</span><span class="tag-pill">MS Excel</span><span class="tag-pill">Power BI</span><span class="tag-pill">Data Visualisation</span></div>
+
+  <div class="more-section-title">More articles</div>
+  <div class="more-grid">
+    <a href="spreadsheets-to-dashboards.html" target="_blank" class="more-card">
+      <span class="more-badge" style="background:#e6f1fb;color:#0c447c;">Analytics Trends</span>
+      <div class="more-title">From Spreadsheets to Dashboards</div>
+      <div class="more-time">5 min read</div>
+    </a>
+    <a href="sales-analytics-insights.html" target="_blank" class="more-card">
+      <span class="more-badge" style="background:#e1f5ee;color:#085041;">Sales Analytics</span>
+      <div class="more-title">5 Sales Analytics Insights That Most Businesses Miss</div>
+      <div class="more-time">6 min read</div>
+    </a>
+    <a href="personal-finance-dashboards.html" target="_blank" class="more-card">
+      <span class="more-badge" style="background:#eeedfe;color:#3c3489;">Financial Insights</span>
+      <div class="more-title">The Rise of Personal Finance Dashboards</div>
+      <div class="more-time">5 min read</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand-row">
+      <div class="footer-brand-mark"><span>OR</span></div>
+      <div class="footer-name">Ogunleye Rapheal A.</div>
+    </div>
+    <a href="../index.html#blog" class="footer-btn">
+    Back to all articles
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+  </a>
+  </div>
+</footer>
+
+</body>
+</html>
